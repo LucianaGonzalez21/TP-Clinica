@@ -1,0 +1,27 @@
+.principal{
+    width: calc(100vw - 10vw);
+    height: 100vh;
+    margin-left: 10vw;
+    background-image: url(../../../assets/fondos/fondo3.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.info{
+    width: 50vw;
+    height: 60vh;
+    background-color: rgb(7, 6, 6, 0.5);
+    border-radius: 20px;
+}
+
+.centered{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.info span{
+    font-size: 2rem;
+    font-weight: bold;
+    color:rgb(230, 238, 246);
+}

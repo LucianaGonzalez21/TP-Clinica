@@ -1,0 +1,42 @@
+<div class="principal">
+    <div class="contendor-formulario">
+        <div class="titulo"><h1>INGRESO</h1></div>
+        <form [formGroup]="formularioIngreso">
+            <div class="contenedor-input">
+                <label for="email"><img src="../../../assets/login/correo.png"></label>
+                <input type="text" formControlName="email" id="email" placeholder="Ingrese su correo">
+                <span class="text-danger" *ngIf="formularioIngreso.controls['email'].errors?.['required'] && formularioIngreso.controls['email'].touched">
+                    Campo obligatorio
+                </span>
+                <span class="text-danger" *ngIf="formularioIngreso.controls['email'].errors?.['contieneEspacios'] && formularioIngreso.controls['email'].touched">
+                    No puede contener espacios
+                </span>
+                <span class="text-danger" *ngIf="formularioIngreso.controls['email'].errors?.['pattern'] && formularioIngreso.controls['email'].touched">
+                    Formato de correo no válido
+                </span>
+            </div>
+            <div class="contenedor-input">
+                <label for="clave"><img src="../../../assets/login/clave.png"></label>
+                <input type="password" formControlName="clave" id="clave" placeholder="Ingrese su clave">
+                <span class="text-danger" *ngIf="formularioIngreso.controls['clave'].errors?.['required'] && formularioIngreso.controls['clave'].touched">
+                    Campo obligatorio
+                </span>
+                <span class="text-danger" *ngIf="formularioIngreso.controls['clave'].errors?.['minlength'] && formularioIngreso.controls['clave'].touched">
+                    Debe tener al menos 6 caracteres
+                </span>
+                <span class="text-danger" *ngIf="formularioIngreso.controls['clave'].errors?.['maxlength'] && formularioIngreso.controls['clave'].touched">
+                    Debe tener 10 caracteres como máximo
+                </span>
+            </div>
+            <button class="btn-enviar" [disabled]="formularioIngreso.invalid" (click)="ingreso()">ENVIAR</button>
+        </form>
+        <div class="acceso-rapido">
+            <button class="btn-acceso-rapido" (click)="accederRapido('paciente1')"><img src="../../../assets/botones/acceso-rapido-pac1.png"></button>
+            <button class="btn-acceso-rapido" (click)="accederRapido('paciente2')"><img src="../../../assets/botones/acceso-rapido-pac2.png"></button>
+            <button class="btn-acceso-rapido" (click)="accederRapido('paciente3')"><img src="../../../assets/botones/acceso-rapido-pac3.png"></button>
+            <button class="btn-acceso-rapido" (click)="accederRapido('especialista1')"><img src="../../../assets/botones/acceso-rapido-esp1.png" alt=""></button>
+            <button class="btn-acceso-rapido" (click)="accederRapido('especialista2')"><img src="../../../assets/botones/acceso-rapido-esp2.png" alt=""></button>
+            <button class="btn-acceso-rapido" (click)="accederRapido('admin')"><img src="../../../assets/botones/acceso-rapido-admin.png"></button>
+        </div>
+    </div>
+</div>

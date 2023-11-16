@@ -1,0 +1,11 @@
+<div *ngIf="!esEspecialista && !esPaciente" class="principal">
+    <div class="contenedor-general">
+        <div class="titulo"><span>Elija una opción</span></div>
+        <div class="contenedor-botones">
+            <button class="boton-alta" (click)="mostrarFormulario('paciente')">PACIENTE <img src="../../../assets/botones/boton-paciente.png"></button>
+            <button class="boton-alta" (click)="mostrarFormulario('especialista')">ESPECIALISTA <img src="../../../assets/botones/boton-especialista.png"></button>
+        </div>
+    </div>
+</div>
+<app-alta-especialista *ngIf="esEspecialista" (eventoEspecialista)="subirUsuario($event, 'especialista')"></app-alta-especialista>
+<app-alta-paciente *ngIf="esPaciente" (eventoPaciente)="subirUsuario($event, 'paciente')"></app-alta-paciente>

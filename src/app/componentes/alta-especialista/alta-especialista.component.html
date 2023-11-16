@@ -1,0 +1,159 @@
+<div class="principal">
+    <div class="container">
+        <form [formGroup]="formularioAlta">
+            <h2>ALTA ESPECIALISTA</h2>
+            <div class="formulario">
+                <div class="colIzq">
+                    <label for="nombre">Nombre</label>
+                    <input formControlName="nombre" id="nombre" type="text" placeholder="Ingrese su nombre">
+                    <span
+                        *ngIf="formularioAlta.controls['nombre'].errors?.['required'] && formularioAlta.controls['nombre'].touched">
+                        Este campo es obligatorio</span>
+                    <span
+                        *ngIf="formularioAlta.controls['nombre'].errors?.['minlength'] && formularioAlta.controls['nombre'].touched">
+                        Debe tener al menos 3 caracteres</span>
+                    <span
+                        *ngIf="formularioAlta.controls['nombre'].errors?.['maxlength'] && formularioAlta.controls['nombre'].touched">
+                        Se alcanzó el maximo de caracteres permitido</span>
+                    <span
+                        *ngIf="formularioAlta.controls['nombre'].errors?.['pattern'] && formularioAlta.controls['nombre'].touched">
+                        Solo caracteres alfabéticos</span>
+                    <label for="apellido">Apellido</label>
+                    <input formControlName="apellido" id="apellido" type="text" placeholder="Ingrese su apellido">
+                    <span
+                        *ngIf="formularioAlta.controls['apellido'].errors?.['required'] && formularioAlta.controls['apellido'].touched">
+                        Este campo es obligatorio</span>
+                    <span
+                        *ngIf="formularioAlta.controls['apellido'].errors?.['minlength'] && formularioAlta.controls['apellido'].touched">
+                        Debe tener al menos 3 caracteres</span>
+                    <span
+                        *ngIf="formularioAlta.controls['apellido'].errors?.['maxlength'] && formularioAlta.controls['apellido'].touched">
+                        Se alcanzó el maximo de caracteres permitido</span>
+                    <span
+                        *ngIf="formularioAlta.controls['apellido'].errors?.['pattern'] && formularioAlta.controls['apellido'].touched">
+                        Solo caracteres alfabéticos</span>
+                    <label for="Edad">Edad</label>
+                    <input formControlName="edad" id="Edad" type="text" placeholder="Ingrese su edad">
+                    <span
+                        *ngIf="formularioAlta.controls['edad'].errors?.['required'] && formularioAlta.controls['edad'].touched">
+                        Este campo es obligatorio</span>
+                    <span
+                        *ngIf="formularioAlta.controls['edad'].errors?.['min'] && formularioAlta.controls['edad'].touched">
+                        La edad mínima es 18</span>
+                    <span
+                        *ngIf="formularioAlta.controls['edad'].errors?.['max'] && formularioAlta.controls['edad'].touched">
+                        La edad máxima es 99</span>
+                    <span
+                        *ngIf="formularioAlta.controls['edad'].errors?.['pattern'] && formularioAlta.controls['edad'].touched">
+                        Solo caracteres numéricos</span>
+                    <label for="dni">DNI (sin puntos)</label>
+                    <input formControlName="dni" id="dni" type="text" placeholder="Ingrese su DNI">
+                    <span
+                        *ngIf="formularioAlta.controls['dni'].errors?.['required'] && formularioAlta.controls['dni'].touched">
+                        Este campo es obligatorio</span>
+                    <span
+                        *ngIf="formularioAlta.controls['dni'].errors?.['minlength'] && formularioAlta.controls['dni'].touched">
+                        Debe tener al menos 7 dígitos</span>
+                    <span
+                        *ngIf="formularioAlta.controls['dni'].errors?.['maxlength'] && formularioAlta.controls['dni'].touched">
+                        No puede tener más de 8 dígitos</span>
+                    <span
+                        *ngIf="formularioAlta.controls['dni'].errors?.['pattern'] && formularioAlta.controls['dni'].touched">
+                        Solo caracteres numéricos</span>
+                </div>
+                <div class="colMed">
+                    <label for="correo">Correo</label>
+                    <input formControlName="mail" id="correo" type="text" placeholder="Ingrese su correo">
+                    <span
+                        *ngIf="formularioAlta.controls['mail'].errors?.['required'] && formularioAlta.controls['mail'].touched">
+                        Este campo es obligatorio</span>
+                    <span
+                        *ngIf="formularioAlta.controls['mail'].errors?.['pattern'] && formularioAlta.controls['mail'].touched">
+                        Formato de correo no válido</span>
+                    <label for="clave">Clave</label>
+                    <input formControlName="clave" id="clave" type="text" placeholder="Ingrese su clave">
+                    <span
+                        *ngIf="formularioAlta.controls['clave'].errors?.['required'] && formularioAlta.controls['clave'].touched">
+                        Este campo es obligatorio</span>
+                    <span
+                        *ngIf="formularioAlta.controls['clave'].errors?.['contieneEspacios'] && formularioAlta.controls['clave'].touched">
+                        La clave no debe contener espacios</span>
+                    <span
+                        *ngIf="formularioAlta.controls['clave'].errors?.['minlength'] && formularioAlta.controls['clave'].touched">
+                        Debe tener al menos 6 caracteres</span>
+                    <span
+                        *ngIf="formularioAlta.controls['clave'].errors?.['maxlength'] && formularioAlta.controls['clave'].touched">
+                        No debe tener mas de 10 caracteres</span>
+                    <label for="confirmacionClave">Confirmación de clave</label>
+                    <input formControlName="confirmacionClave" id="confirmacionClave" type="text"
+                        placeholder="Reingrese su clave">
+                    <span
+                        *ngIf="formularioAlta.controls['clave'].errors?.['required'] && formularioAlta.controls['clave'].touched">
+                        Este campo es obligatorio</span>
+                    <span
+                        *ngIf="formularioAlta.controls['clave'].errors?.['contieneEspacios'] && formularioAlta.controls['clave'].touched">
+                        La clave no debe contener espacios</span>
+                    <span
+                        *ngIf="formularioAlta.controls['clave'].errors?.['minlength'] && formularioAlta.controls['clave'].touched">
+                        Debe tener al menos 6 caracteres</span>
+                    <span
+                        *ngIf="formularioAlta.controls['clave'].errors?.['maxlength'] && formularioAlta.controls['clave'].touched">
+                        No debe tener mas de 10 caracteres</span>
+                    <span
+                        *ngIf="formularioAlta.errors?.['noCoinciden'] && formularioAlta.controls['clave'].touched && formularioAlta.controls['confirmacionClave'].touched">
+                        Las claves no coinciden</span>
+                </div>
+                <div class="colDer">
+                    <label for="foto">Foto</label>
+                    <!--<input type="file" requiredFileType="image/*" (change)="funcion($event)" name="foto" id="foto">-->
+
+                    <div>
+                        <input formControlName="foto" id="foto" type="file" requiredFileType="image/*" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+                        
+                        <div class="file-upload">
+                            
+                            {{fileName || "No se ha cargado una foto."}}
+                            
+                            <button mat-mini-fab color="primary" class="upload-btn" (click)="fileUpload.click()">
+                                <img *ngIf="!fotoSeleccionada" src="../../../assets/avatar-de-usuario.png" alt="">
+                                <img *ngIf="fotoSeleccionada" [src]="fotoDelUsuario" alt="">
+                            </button>
+                        </div>
+                    </div>
+
+                    <table class="table table-success table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>Especialidades</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input id="especialidadTxt" formControlName="especialidad"
+                                        placeholder="Escribí una nueva especialidad"><div (click)="agregarEspecialidad()"><span class="btn-agregar">Agregar</span></div></td>
+                            </tr>
+                            <tr *ngFor="let especialidad of arrayEspecialidades; index as i"
+                                (click)="guardarEspecialidades(especialidad)">
+                                <td>{{especialidad}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!--<div>
+                        <span (click)="agregarEspecialidad()">Agregar especialidad</span>
+                    </div>-->
+                    <div>
+                        <label for="">Especialidad/es seleccionada/s: </label>
+                        <span *ngFor="let especialidad of especialidades">
+                            <ul>
+                                <li>
+                                    {{especialidad}}
+                                </li>
+                            </ul>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <button (click)="guardarEspecialista()" [disabled]="formularioAlta.invalid">ENVIAR</button>
+        </form>
+    </div>
+</div>

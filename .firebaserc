@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "tpclinica-62691": {
+      "hosting": {
+        "TpClinica": [
+          "tpclinica-62691"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "tpclinica-62691"
+  }
+}

@@ -1,0 +1,44 @@
+<div class="principal">
+    <div class="titulo">
+        <div>LISTADO DE USUARIOS</div>
+    </div>
+    <div class="contenedor-cartas">
+        <div class="carta" *ngFor="let especialista of arrayEspecialistas">
+            <div class="imagen">
+                <img [src]="especialista.fotoUrl">
+            </div>
+            <div class="informacion">
+                <span>Especialista</span>
+                <span>Apellido: {{especialista.apellido}}</span>
+                <span>Nombre: {{especialista.nombre}}</span>
+                <span>Especialidad/es:</span>
+                <div *ngFor="let especialidad of especialista.especialidad">
+                    <span>{{especialidad}}</span>
+                </div>
+                <button *ngIf="!especialista.estaHabilitado" (click)="modificarHabilitacion(especialista)" class="btn-habilitar">Habilitar</button>
+                <button *ngIf="especialista.estaHabilitado" (click)="modificarHabilitacion(especialista)" class="btn-deshabilitar">Dehabilitar</button>
+            </div>
+        </div>
+        <div class="carta" *ngFor="let paciente of arrayPacientes">
+            <div class="imagen">
+                <img [src]="paciente.foto1Url">
+            </div>
+            <div class="informacion">
+                <span>Paciente</span>
+                <span>Apellido: {{paciente.apellido}}</span>
+                <span>Nombre: {{paciente.nombre}}</span>
+                <span>Obra Social: {{paciente.obraSocial}}</span>
+            </div>
+        </div>
+        <div class="carta" *ngFor="let admin of arrayAdministradores">
+            <div class="imagen">
+                <img [src]="admin.fotoUrl">
+            </div>
+            <div class="informacion">
+                <span>Administrador</span>
+                <span>Apellido: {{admin.apellido}}</span>
+                <span>Nombre: {{admin.nombre}}</span>
+            </div>
+        </div>
+    </div>
+</div>

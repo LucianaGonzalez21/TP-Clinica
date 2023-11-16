@@ -1,0 +1,126 @@
+<div class="principal">
+    <div class="container">
+        <form [formGroup]="formularioAltaAdmin">
+            <h2>ALTA ADMINISTRADOR</h2>
+            <div class="formulario">
+                <div class="colIzq">
+                    <label for="nombre">Nombre</label>
+                    <input formControlName="nombre" id="nombre" type="text" placeholder="Ingrese su nombre">
+                    <span
+                        *ngIf="formularioAltaAdmin.controls['nombre'].errors?.['required'] && formularioAltaAdmin.controls['nombre'].touched">
+                        Este campo es obligatorio</span>
+                    <span
+                        *ngIf="formularioAltaAdmin.controls['nombre'].errors?.['minlength'] && formularioAltaAdmin.controls['nombre'].touched">
+                        Debe tener al menos 3 caracteres</span>
+                    <span
+                        *ngIf="formularioAltaAdmin.controls['nombre'].errors?.['maxlength'] && formularioAltaAdmin.controls['nombre'].touched">
+                        Se alcanzó el maximo de caracteres permitido</span>
+                    <span
+                        *ngIf="formularioAltaAdmin.controls['nombre'].errors?.['pattern'] && formularioAltaAdmin.controls['nombre'].touched">
+                        Solo caracteres alfabéticos</span>
+                    <label for="apellido">Apellido</label>
+                    <input formControlName="apellido" id="apellido" type="text" placeholder="Ingrese su apellido">
+                    <span
+                        *ngIf="formularioAltaAdmin.controls['apellido'].errors?.['required'] && formularioAltaAdmin.controls['apellido'].touched">
+                        Este campo es obligatorio</span>
+                    <span
+                        *ngIf="formularioAltaAdmin.controls['apellido'].errors?.['minlength'] && formularioAltaAdmin.controls['apellido'].touched">
+                        Debe tener al menos 3 caracteres</span>
+                    <span
+                        *ngIf="formularioAltaAdmin.controls['apellido'].errors?.['maxlength'] && formularioAltaAdmin.controls['apellido'].touched">
+                        Se alcanzó el maximo de caracteres permitido</span>
+                    <span
+                        *ngIf="formularioAltaAdmin.controls['apellido'].errors?.['pattern'] && formularioAltaAdmin.controls['apellido'].touched">
+                        Solo caracteres alfabéticos</span>
+                    <label for="Edad">Edad</label>
+                    <input formControlName="edad" id="Edad" type="text" placeholder="Ingrese su edad">
+                    <span
+                        *ngIf="formularioAltaAdmin.controls['edad'].errors?.['required'] && formularioAltaAdmin.controls['edad'].touched">
+                        Este campo es obligatorio</span>
+                    <span
+                        *ngIf="formularioAltaAdmin.controls['edad'].errors?.['min'] && formularioAltaAdmin.controls['edad'].touched">
+                        La edad mínima es 18</span>
+                    <span
+                        *ngIf="formularioAltaAdmin.controls['edad'].errors?.['max'] && formularioAltaAdmin.controls['edad'].touched">
+                        La edad máxima es 99</span>
+                    <span
+                        *ngIf="formularioAltaAdmin.controls['edad'].errors?.['pattern'] && formularioAltaAdmin.controls['edad'].touched">
+                        Solo caracteres numéricos</span>
+                    <label for="dni">DNI (sin puntos)</label>
+                    <input formControlName="dni" id="dni" type="text" placeholder="Ingrese su DNI">
+                    <span
+                        *ngIf="formularioAltaAdmin.controls['dni'].errors?.['required'] && formularioAltaAdmin.controls['dni'].touched">
+                        Este campo es obligatorio</span>
+                    <span
+                        *ngIf="formularioAltaAdmin.controls['dni'].errors?.['minlength'] && formularioAltaAdmin.controls['dni'].touched">
+                        Debe tener al menos 7 dígitos</span>
+                    <span
+                        *ngIf="formularioAltaAdmin.controls['dni'].errors?.['maxlength'] && formularioAltaAdmin.controls['dni'].touched">
+                        No puede tener más de 8 dígitos</span>
+                    <span
+                        *ngIf="formularioAltaAdmin.controls['dni'].errors?.['pattern'] && formularioAltaAdmin.controls['dni'].touched">
+                        Solo caracteres numéricos</span>
+                </div>
+                <div class="colMed">
+                    <label for="correo">Correo</label>
+                    <input formControlName="mail" id="correo" type="text" placeholder="Ingrese su correo">
+                    <span
+                        *ngIf="formularioAltaAdmin.controls['mail'].errors?.['required'] && formularioAltaAdmin.controls['mail'].touched">
+                        Este campo es obligatorio</span>
+                    <span
+                        *ngIf="formularioAltaAdmin.controls['mail'].errors?.['pattern'] && formularioAltaAdmin.controls['mail'].touched">
+                        Formato de correo no válido</span>
+                    <label for="clave">Clave</label>
+                    <input formControlName="clave" id="clave" type="text" placeholder="Ingrese su clave">
+                    <span
+                        *ngIf="formularioAltaAdmin.controls['clave'].errors?.['required'] && formularioAltaAdmin.controls['clave'].touched">
+                        Este campo es obligatorio</span>
+                    <span
+                        *ngIf="formularioAltaAdmin.controls['clave'].errors?.['contieneEspacios'] && formularioAltaAdmin.controls['clave'].touched">
+                        La clave no debe contener espacios</span>
+                    <span
+                        *ngIf="formularioAltaAdmin.controls['clave'].errors?.['minlength'] && formularioAltaAdmin.controls['clave'].touched">
+                        Debe tener al menos 6 caracteres</span>
+                    <span
+                        *ngIf="formularioAltaAdmin.controls['clave'].errors?.['maxlength'] && formularioAltaAdmin.controls['clave'].touched">
+                        No debe tener mas de 10 caracteres</span>
+                    <label for="confirmacionClave">Confirmación de clave</label>
+                    <input formControlName="confirmacionClave" id="confirmacionClave" type="text"
+                        placeholder="Reingrese su clave">
+                    <span
+                        *ngIf="formularioAltaAdmin.controls['clave'].errors?.['required'] && formularioAltaAdmin.controls['clave'].touched">
+                        Este campo es obligatorio</span>
+                    <span
+                        *ngIf="formularioAltaAdmin.controls['clave'].errors?.['contieneEspacios'] && formularioAltaAdmin.controls['clave'].touched">
+                        La clave no debe contener espacios</span>
+                    <span
+                        *ngIf="formularioAltaAdmin.controls['clave'].errors?.['minlength'] && formularioAltaAdmin.controls['clave'].touched">
+                        Debe tener al menos 6 caracteres</span>
+                    <span
+                        *ngIf="formularioAltaAdmin.controls['clave'].errors?.['maxlength'] && formularioAltaAdmin.controls['clave'].touched">
+                        No debe tener mas de 10 caracteres</span>
+                    <span
+                        *ngIf="formularioAltaAdmin.errors?.['noCoinciden'] && formularioAltaAdmin.controls['clave'].touched && formularioAltaAdmin.controls['confirmacionClave'].touched">
+                        Las claves no coinciden</span>
+                </div>
+                <div class="colDer">
+                    <label for="foto">Foto</label>
+                    <div>
+                        <input formControlName="foto" id="foto" type="file" requiredFileType="image/*" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+                        
+                        <div class="file-upload">
+                            
+                            {{fileName || "No se ha cargado una foto."}}
+                            
+                            <button mat-mini-fab color="primary" class="upload-btn" (click)="fileUpload.click()">
+                                <img *ngIf="!fotoSeleccionada" src="../../../assets/avatar-de-usuario.png" alt="">
+                                <img *ngIf="fotoSeleccionada" [src]="fotoDelUsuario" alt="">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button (click)="guardarAdmin()" [disabled]="formularioAltaAdmin.invalid">ENVIAR</button>
+        </form>
+    </div>
+</div>

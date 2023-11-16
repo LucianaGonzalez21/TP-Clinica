@@ -1,0 +1,79 @@
+.principal {
+    width: calc(100vw - 10vw);
+    height: 100vh;
+    /* background:linear-gradient(#FFB703, #f0cd76, #e9e0ca); */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10vw;
+}
+
+.container {
+    width: 80vw;
+    height: 90vh;
+    background-color: rgba(142, 202, 230, 0.6);
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.formulario {
+    width: 80vw;
+    height: 70vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.colIzq,
+.colDer,
+.colMed {
+    width: 24vw;
+    height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* input[type="text"] {
+    border: none;
+    border-bottom: 2px solid #152014;
+    background-color: #afb6ad;
+    border-radius: 5px;
+    background-color: transparent;
+} */
+
+table {
+    width: 20vw;
+    max-height: 20vh;
+    overflow: auto;
+    display: inline-block;
+}
+
+#especialidadTxt {
+    width: 18vw;
+}
+
+
+.file-input {
+    display: none;
+}
+
+.file-upload img {
+    width: 50px;
+    height: 50px;
+}

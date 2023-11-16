@@ -1,0 +1,12 @@
+<div class="principal" *ngIf="!especialista && !admin && !paciente && !habilitacion">
+    <div class="contenedor-botones">
+        <button class="item1 btn-elegir" (click)="mostrarFormulario('habilitacion')">LISTADO DE USUARIO <img src="../../../assets/botones/boton-habilitar.png"></button>
+        <button class="item2 btn-elegir" (click)="mostrarFormulario('paciente')">ALTA PACIENTE <img src="../../../assets/botones/boton-paciente.png"></button>
+        <button class="item3 btn-elegir" (click)="mostrarFormulario('especialista')">ALTA ESPECIALISTA <img src="../../../assets/botones/boton-especialista.png"></button>
+        <button class="item4 btn-elegir" (click)="mostrarFormulario('admin')">ALTA ADMINISTRADOR <img src="../../../assets/botones/boton-admin.png"></button>
+    </div>
+</div>
+<app-alta-especialista *ngIf="especialista" (eventoEspecialista)="subirUsuario($event, 'especialista')"></app-alta-especialista>
+<app-alta-paciente *ngIf="paciente" (eventoPaciente)="subirUsuario($event, 'paciente')"></app-alta-paciente>
+<app-alta-administrador *ngIf="admin" (eventoAdmin)="subirUsuario($event, 'admin')"></app-alta-administrador>
+<app-habilitar-usuarios *ngIf="habilitacion"></app-habilitar-usuarios>

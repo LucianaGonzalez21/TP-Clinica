@@ -1,0 +1,162 @@
+<div class="principal centered-row">
+    <div class="informacion centered-column" *ngIf="!mostrarHorarios && !mostrarHistorial">
+        <div class="titulo centered-column">
+            <strong>Mi Perfil</strong>
+        </div>
+        <div class="datos-personales centered-column">
+            <button (click)="vistaHorarios()" *ngIf="datosUsuario?.tipoUsuario=='especialista'" class="btn-horarios">Ver
+                mis horarios</button> <!--SI ES ESPECIALISTA-->
+            <span>Nombre: {{datosUsuario?.nombre}}</span>
+            <span>Apellido: {{datosUsuario?.apellido}}</span>
+            <span>Edad: {{datosUsuario?.edad}}</span>
+            <span>DNI: {{datosUsuario?.dni}}</span>
+            <span>Correo: {{datosUsuario?.mail}}</span>
+            <span *ngIf="datosUsuario?.tipoUsuario == 'paciente'">Obra Social: {{datosUsuario?.obraSocial}}</span>
+            <span *ngIf="datosUsuario?.tipoUsuario == 'especialista'">Especialidades:
+                {{datosUsuario?.especialidad}}</span>
+            <img *ngIf="datosUsuario?.tipoUsuario == 'especialista' || datosUsuario?.tipoUsuario == 'admin'"
+                [src]="datosUsuario?.fotoUrl" alt="foto">
+            <div *ngIf="datosUsuario?.tipoUsuario == 'paciente'" class="centered-row">
+                <img [src]="datosUsuario?.foto1Url" alt="foto">
+                <img [src]="datosUsuario?.foto2Url" alt="foto">
+            </div>
+            <button class="btn-confirmar btn-danger" (click)="verHistorialCitas()"
+                *ngIf="datosUsuario?.tipoUsuario=='paciente'" class="btn-horarios">Ver Historial y citas</button>
+
+        </div>
+    </div>
+
+    <div *ngIf="mostrarHorarios" class="informacion centered-column">
+        <div class="botones-especialidad botones-dias" *ngFor="let especialidad of datosUsuario.especialidad">
+            <button (click)="cambiarEspecialidad(especialidad)"
+                [ngClass]="{'rojo':!(especialidad==this.especialidadSelecionada), 'azul':(especialidad==this.especialidadSelecionada)}"
+                class="btn-especialidad">{{especialidad}}</button>
+        </div>
+        <div class="botones-dias"> <!--solo si selecciona una especialidad-->
+            <button (click)="diasSelecionados('lunes')"
+                [ngClass]="{'rojo':!diasSelecionadosArray['lunes'], 'azul':diasSelecionadosArray['lunes']}"
+                class="btn-dia">Lunes</button>
+            <button (click)="diasSelecionados('martes')"
+                [ngClass]="{'rojo':!diasSelecionadosArray['martes'], 'azul':diasSelecionadosArray['martes']}"
+                class="btn-dia">Martes</button>
+            <button (click)="diasSelecionados('miercoles')"
+                [ngClass]="{'rojo':!diasSelecionadosArray['miercoles'], 'azul':diasSelecionadosArray['miercoles']}"
+                class="btn-dia">Miércoles</button>
+            <button (click)="diasSelecionados('jueves')"
+                [ngClass]="{'rojo':!diasSelecionadosArray['jueves'], 'azul':diasSelecionadosArray['jueves']}"
+                class="btn-dia">Jueves</button>
+            <button (click)="diasSelecionados('viernes')"
+                [ngClass]="{'rojo':!diasSelecionadosArray['viernes'], 'azul':diasSelecionadosArray['viernes']}"
+                class="btn-dia">Viernes</button>
+        </div>
+        <div class="centered-column contenedor-horario">
+            <label for="hora">Duración de cada turno:</label>
+            <div class="botones-hora"> <!--solo si selecciona una especialidad-->
+                <button (click)="horaSelecionada('quince')" [ngClass]="{'rojo':!quince, 'azul':quince}"
+                    class="btn-hora">15 minutos</button>
+                <button (click)="horaSelecionada('treinta')" [ngClass]="{'rojo':!treinta, 'azul':treinta}"
+                    class="btn-hora">30 minutos</button>
+                <button (click)="horaSelecionada('cuarentaCinco')"
+                    [ngClass]="{'rojo':!cuarentaCinco, 'azul':cuarentaCinco}" class="btn-hora">45 minutos</button>
+                <button (click)="horaSelecionada('sesenta')" [ngClass]="{'rojo':!sesenta, 'azul':sesenta}"
+                    class="btn-hora">60 minutos</button>
+            </div>
+        </div>
+        <div class="contenedor-boton-confirmar centered-column">
+            <button (click)="subirHorarioBD()" class="btn-confirmar">CONFIRMAR</button>
+            <button class="btn-confirmar btn-danger" (click)="vistaHorarios()"
+                *ngIf="datosUsuario.tipoUsuario=='especialista'" class="btn-horarios">Salir</button>
+            <!--SI ES ESPECIALISTA-->
+
+        </div>
+    </div>
+    <div class="informacion centered-column" id="pdf" *ngIf="mostrarHistorial" class="bg-info w-100 ">
+        <!-- tabla de historial -->
+
+        <div class="card m-5 text-bg-success p-3" style="max-width: 540px;">
+            <div class="row ">
+                <div class="col-md-4">
+                    <h3>
+                        HISTORIA CLÍNICA DE {{ datosUsuario?.apellido }} {{ datosUsuario?.nombre }}
+                        <img class="img-fluid rounded-start" [src]="datosUsuario?.foto1Url" alt="logo" />
+                        <img class="img-fluid rounded-start" [src]="datosUsuario?.foto2Url" alt="logo" />
+                    </h3>
+                    <h3 *ngIf="!historialClinicioSelecionado" style="text-align: center;" class="text-warning">
+                        El paciente no posee un historial clinico en esta especialidad
+
+                    </h3>
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title"> Fecha Emision                         
+                           {{ obtenerFechaFormateada(historialClinicioSelecionado.fechaInforme) | date:'dd MMMM yyyy':'UTC-3':'es-ES' }}
+                        </h5>
+                        <p class="card-text">
+                                <h3>
+                                    Altura
+                                </h3>
+                                <p>{{ historialClinicioSelecionado?.altura }}</p>
+                                Peso
+                                <p>{{ historialClinicioSelecionado?.peso }}</p>
+                                Temperatura
+                                <p>{{ historialClinicioSelecionado?.temperatura }}</p>
+                                Presion
+                                <p>{{ historialClinicioSelecionado?.presion }}</p>
+        
+                                Detalles
+                                <p>
+                            <p class="text-dark" *ngFor="let detalle of (historialClinicioSelecionado?.detalles) | keyvalue">
+                                {{ detalle?.key}}: {{ detalle?.value}}
+                            </p>
+                     
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+          
+
+    
+                    <!-- <li data-html2canvas-ignore="true">
+                    Descargar
+                    <p data-html2canvas-ignore="true">
+                        <button (click)="descargarHistorialPdf()" class="btn btn-success">
+                            Descargar PDF
+                        </button>
+                    </p>
+                </li> -->
+             
+
+
+            <button class="btn-confirmar btn-danger" (click)="volverMenu()" *ngIf="mostrarHistorial">Volver
+                Menu</button>
+
+            <!-- Tabla de Turnos -->
+            <table class="table table-striped table-dark container w-100 ">
+                <thead class="table-dark">
+                    <tr>
+                        <th *ngIf="datosUsuario?.tipoUsuario=='paciente'">Especialista</th>
+                        <th *ngIf="datosUsuario?.tipoUsuario=='especialista'">Paciente</th>
+                        <th>Especialidad</th>
+                        <th>Día </th>
+                        <th>Horario</th>
+                        <th>Estado</th>
+
+                    </tr>
+                </thead>
+                <tbody class="turnos w-100">
+                    <tr *ngFor="let turno of turnos ">
+                        <td *ngIf="datosUsuario?.tipoUsuario=='paciente'">{{ turno.especialista?.nombre }}</td>
+                        <td *ngIf="datosUsuario?.tipoUsuario=='especialista'">{{ turno.paciente?.nombre }}</td>
+                        <td>{{ turno?.especialidadDelTurno}}</td>
+                        <td>{{ obtenerFechaFormateada(turno.dia) | date:'dd MMMM yyyy' :'UTC-3':'es-ES' }}</td>
+                        <td>{{ turno?.horario }}</td>
+                        <td>
+                            {{ turno?.estado }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
