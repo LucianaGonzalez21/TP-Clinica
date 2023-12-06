@@ -17,7 +17,7 @@
 
     display: grid;
     justify-content: space-evenly;
-    grid-template-columns: 20vw 20vw 20vw 20vw;
+    grid-template-columns: 25vw 25vw 25vw;
     column-gap: 10px;
     row-gap: 10px;
 
@@ -35,10 +35,10 @@
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
-    height: 50vh;
-    width: 20vw;
+    height: 25vw;
+    width: 25vw;
     border-style: solid;
-    border-radius: 10px;
+    border-radius: 100%;
     border-color: #29daa2;
     font-size: 1.3rem;
 }
@@ -53,10 +53,10 @@
 }
 
 .imagen img {
-    width: 15vw;
-    height: 20vh;
+    width: 10vw;
+    height: 10vw;
     object-fit: cover;
-    border-radius: 10px;
+    border-radius: 100%;
 }
 
 .informacion{

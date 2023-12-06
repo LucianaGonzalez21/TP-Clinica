@@ -2,6 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FirebaseService } from 'src/app/servicios/firebase.service';
 import { NotificacionesService } from 'src/app/servicios/notificaciones.service';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 interface DiasSelecionadosArray {
   [key: string]: boolean;
@@ -174,7 +176,40 @@ export class MiPerfilComponent implements OnInit, OnDestroy {
     return indexDelElemento;
   }
 
-  descargarHistorialPdf() { }
+  descargarHistorialPdf() {
+    const DATA = document.getElementById('pdf');
+    const doc = new jsPDF('p', 'pt', 'a4');
+    const options = {
+      background: 'white',
+      scale: 2,
+      useCORS: true,
+    };
+    //@ts-ignore
+    html2canvas(DATA, options)
+      .then((canvas: any) => {
+        const img = canvas.toDataURL('image/PNG');
+
+        const bufferX = 30;
+        const bufferY = 30;
+        const imgProps = (doc as any).getImageProperties(img);
+        const pdfWidth = doc.internal.pageSize.getWidth() - 2 * bufferX;
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        doc.addImage(
+          img,
+          'PNG',
+          bufferX,
+          bufferY,
+          pdfWidth,
+          pdfHeight,
+          undefined,
+          'FAST'
+        );
+        return doc;
+      })
+      .then((docResult: any) => {
+        docResult.save(`historial_clinico.pdf`);
+      });
+  }
 
   async cargarHistorial(paciente: any) {
     let historial: any;

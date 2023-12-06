@@ -2,10 +2,11 @@
   <li><a class="active" routerLink="bienvenido">Bienvenido</a></li>
   <li><a routerLink="alta"  *ngIf="!estaLogueado">Registro</a></li>
   <li><a routerLink="login" *ngIf="!estaLogueado">Ingreso</a></li>
-  <li><a routerLink="seccion-usuarios" *ngIf="estaLogueado">Sección Usuarios</a></li>
+  <li *ngIf="this.firebase?.usuarioLogeado?.tipoUsuario=='admin'"><a routerLink="seccion-usuarios" *ngIf="estaLogueado">Sección Usuarios</a></li>
   <li><a routerLink="mi-perfil" *ngIf="estaLogueado">Mi perfil</a></li>
-  <li><a routerLink="turno" *ngIf="estaLogueado">Turnos Paciente</a></li>
+  <li *ngIf="this.firebase?.usuarioLogeado?.tipoUsuario== 'paciente' || this.firebase?.usuarioLogeado?.tipoUsuario== 'admin' "><a routerLink="turno" *ngIf="estaLogueado">Turnos Paciente</a></li>
   <li><a routerLink="turnoEspecialista" *ngIf="estaLogueado">Turnos Asignados</a></li>
+  <li *ngIf="this.firebase?.usuarioLogeado?.tipoUsuario=='admin'"><a routerLink="graficos">Estadísticas y Gráficos</a></li>
   <!-- <li><button [hidden]="!estaLogueado" (click)="salir()">Salir</button></li> -->
   <li><a [hidden]="!estaLogueado" (click)="salir()" class="active">Salir</a></li>
 </ul>

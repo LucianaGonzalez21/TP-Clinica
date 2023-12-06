@@ -20,8 +20,13 @@ export class AltaEspecialistaComponent implements OnInit, OnDestroy {
   fileName = '';
   fotoSeleccionada:boolean=false;
   fotoDelUsuario:string='';
+  tokenGoogle="";
   @Output() eventoEspecialista : EventEmitter<any> = new EventEmitter<any>();
 
+  resolved(captchaResponse: string) {
+    console.log(`Resolved response token: ${captchaResponse}`);
+    this.tokenGoogle = captchaResponse;
+  }
   constructor(private formBuilder: FormBuilder, private firebase: FirebaseService, private router: Router, private notificaciones: NotificacionesService) { }
 
   ngOnInit(): void {

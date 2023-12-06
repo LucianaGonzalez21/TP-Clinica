@@ -145,7 +145,10 @@
                     </div>
                 </div>
             </div>
-            <button (click)="guardarEspecialista()" [disabled]="formularioAltaPaciente.invalid">ENVIAR</button>
+            <button (click)="guardarEspecialista()" [disabled]="formularioAltaPaciente.invalid || !tokenGoogle">ENVIAR</button>
+
+            <re-captcha (resolved)="resolved($event)" siteKey="6LfeSiEpAAAAAHgr-1PXomiD3PkDLn2gzcS1v6EF"></re-captcha>
+
         </form>
     </div>
 </div>

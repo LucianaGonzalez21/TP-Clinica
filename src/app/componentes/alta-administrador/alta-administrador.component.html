@@ -120,7 +120,8 @@
                     </div>
                 </div>
             </div>
-            <button (click)="guardarAdmin()" [disabled]="formularioAltaAdmin.invalid">ENVIAR</button>
+            <button (click)="guardarAdmin()" [disabled]="formularioAltaAdmin.invalid || !tokenGoogle">ENVIAR</button>
+            <re-captcha (resolved)="resolved($event)" siteKey="6LfeSiEpAAAAAHgr-1PXomiD3PkDLn2gzcS1v6EF"></re-captcha>
         </form>
     </div>
 </div>

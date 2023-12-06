@@ -1,6 +1,7 @@
-<div class="principal">
-    <div class="titulo">
+<div class="principal" style="background-color: rgb(124, 218, 240);">
+    <div class="titulo" style="padding: 0.5rem;">
         <div>LISTADO DE USUARIOS</div>
+        <button   (click)="descargarDatosTodosLosUsuarios()" class="btn-habilitar p-2 m-2">Descargar datos de todos los usuarios</button>
     </div>
     <div class="contenedor-cartas">
         <div class="carta" *ngFor="let especialista of arrayEspecialistas">
@@ -20,14 +21,19 @@
             </div>
         </div>
         <div class="carta" *ngFor="let paciente of arrayPacientes">
-            <div class="imagen">
-                <img [src]="paciente.foto1Url">
-            </div>
-            <div class="informacion">
-                <span>Paciente</span>
-                <span>Apellido: {{paciente.apellido}}</span>
-                <span>Nombre: {{paciente.nombre}}</span>
-                <span>Obra Social: {{paciente.obraSocial}}</span>
+            <div class="gap-5">
+
+                <div class="imagen">
+                    <img [src]="paciente.foto1Url">
+                </div>
+                <div class="informacion">
+                    <span>Paciente</span>
+                    <span>Apellido: {{paciente.apellido}}</span>
+                    <span>Nombre: {{paciente.nombre}}</span>
+                    <span>Obra Social: {{paciente.obraSocial | primeraLetraMayuscula}}</span>
+                    <button *ngIf="paciente?.historial" (click)="mostrarHistorial(paciente)" class="btn-habilitar m-1">Historial</button>
+                    <button *ngIf="paciente?.historial" (click)="descargarInfoTurnosPaciente(paciente)" class="btn-habilitar m-1">Descargar Excel</button>
+                </div>
             </div>
         </div>
         <div class="carta" *ngFor="let admin of arrayAdministradores">
@@ -38,6 +44,53 @@
                 <span>Administrador</span>
                 <span>Apellido: {{admin.apellido}}</span>
                 <span>Nombre: {{admin.nombre}}</span>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="pacienteSelecionado" class="card m-5 text-bg-success p-3" style="max-width: 540px;">
+        <div class="row ">
+            <div class="col-md-4">
+                <h3>
+                    HISTORIA CLÍNICA DE {{ pacienteSelecionado?.apellido }} {{ pacienteSelecionado?.nombre }}
+                    <img class="img-fluid rounded-start" [src]="pacienteSelecionado?.foto1Url" alt="logo" />
+                    <img class="img-fluid rounded-start" [src]="pacienteSelecionado?.foto2Url" alt="logo" />
+                </h3>
+                <h3 *ngIf="!pacienteSelecionado?.historial" style="text-align: center;" class="text-warning">
+                    El paciente no posee un historial clinico en esta especialidad
+
+                </h3>
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <div class="">
+                        <button  (click)="CerrarHistorial()" class="btn-deshabilitar">Cerrar</button>
+                    </div>
+                    <h5 class="card-title"> Fecha Emision                         
+                       {{ obtenerFechaFormateada(pacienteSelecionado?.historial.fechaInforme) | date:'dd MMMM yyyy':'UTC-3':'es-ES' }}
+                    </h5>
+                    <p class="card-text">
+                            <h3>
+                                Altura
+                            </h3>
+                            <p>{{ pacienteSelecionado?.historial?.altura }}</p>
+                            Peso
+                            <p>{{ pacienteSelecionado?.historial?.peso }}</p>
+                            Temperatura
+                            <p>{{ pacienteSelecionado?.historial?.temperatura }}</p>
+                            Presion
+                            <p>{{ pacienteSelecionado?.historial?.presion }}</p>
+    
+                            <h3>
+                                Detalles
+                            </h3>
+                            <div *ngFor="let detalle of (pacienteSelecionado.historial.detalles) let i=index">
+                                <div *ngFor="let subDetalle of (detalle | keyvalue) ">
+                                    <p >{{subDetalle.key}}: {{subDetalle.value}}</p>
+                                </div>
+                            </div>
+                 
+                </div>
             </div>
         </div>
     </div>

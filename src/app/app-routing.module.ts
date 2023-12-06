@@ -12,13 +12,14 @@ import { estaLogueadoGuard } from './guards/esta-logueado.guard';
 
 const routes: Routes = [
   {path: "", redirectTo:"bienvenido", pathMatch:"full"},
-  {path: "alta", title:"Registro", component:RegistroComponent},
-  {path: "bienvenido", title:"Bienvenido", component:BienvenidaComponent},
-  {path: "login", title:"Ingreso", component:LoginComponent},
-  {path: "seccion-usuarios", component:SeccionUsuariosComponent, canActivate: [esAdminGuard]},
-  {path: "mi-perfil", title:"Mi perfil", component:MiPerfilComponent, canActivate: [estaLogueadoGuard]},
-  {path: "turno", title:"Turno", component:TurnoPacienteComponent, canActivate: [estaLogueadoGuard]},
-  {path: "turnoEspecialista", title:"Turno", component:TurnosEspecialistaComponent, canActivate: [estaLogueadoGuard]},
+  {path: "alta", title:"Registro", component:RegistroComponent, data: { animation: "Alta" } },
+  {path: "bienvenido", title:"Bienvenido", component:BienvenidaComponent, data: { animation: true } },
+  {path: "login", title:"Ingreso", component:LoginComponent, data: { animation: true } },
+  {path: "seccion-usuarios", component:SeccionUsuariosComponent, canActivate: [esAdminGuard], data: { animation: true} },
+  {path: "mi-perfil", title:"Mi perfil", component:MiPerfilComponent, canActivate: [estaLogueadoGuard], data: { animation: true } },
+  {path: "turno", title:"Turno", component:TurnoPacienteComponent, canActivate: [estaLogueadoGuard], data: { animation: true } },
+  {path: "turnoEspecialista", title:"Turno", component:TurnosEspecialistaComponent, canActivate: [estaLogueadoGuard], data: { animation: true } },
+  { path: 'graficos', loadChildren: () => import('./modulos/graficos/graficos.module').then(m => m.GraficosModule) },
 ];
 
 @NgModule({

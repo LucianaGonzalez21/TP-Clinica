@@ -2,14 +2,13 @@
   <div class=" m-0 p-0 principal ">
     <div class="row col-12 m-0 text-center float-end">
       <div class=" text-center float-end">
-        <div *ngIf="datosUsuario.tipoUsuario=='admin'" class="row">
-          <h3 >Nuestros Pacientes</h3>
+        <div *ngIf="datosUsuario?.tipoUsuario=='admin'" class="row">
+          <h3>Nuestros Pacientes</h3>
           <div *ngFor="let paciente of pacientes" class="col-2">
-            <div (click)="selecionadoPaciente(paciente)" class="bg-info p-2 gap-2 rounded-circle">
-              <button class="btn btn-success fab-btn btn-sm especialista-button" type="button" style="height: 200px;">
+            <div (click)="selecionadoPaciente(paciente)" class="">
+              <button class="btn btn-success rounded-circle fab-btn btn-sm especialista-button" type="button" style="height: 200px;">
                 <div class="d-flex flex-column align-items-center">
-                  <img [src]="paciente.foto1Url" alt="Foto paciente"
-                  class="img-fluid smaller-image especialista-image">
+                  <img [src]="paciente.foto1Url" alt="Foto paciente" class="img-fluid smaller-image especialista-image">
                   <div class="overflow-hidden">
                     <h4>{{ paciente.nombre }}</h4>
                     <h4>{{ paciente.apellido }}</h4>
@@ -19,15 +18,45 @@
             </div>
           </div>
         </div>
+
         <hr>
-        <div *ngIf="((datosUsuario.tipoUsuario=='admin' && pacienteSelecionadoPorAdmin) || datosUsuario.tipoUsuario=='paciente') "  class="row">
-          <h3 >Nuestros Especialistas</h3>
+        <!-- Selecion de especialidad Disponible -->
+        <div
+          *ngIf="((datosUsuario?.tipoUsuario=='admin' && pacienteSelecionadoPorAdmin) || (datosUsuario?.tipoUsuario=='paciente')) "
+          class="col-12 d-flex">
+          <div class="col-12 d-flex flex-column">
+            <h3>Especialidades disponibles</h3>
+            <div class="container">
+              <div class=" p-2 gap-2 row">
+                <ng-container *ngFor="let especialidad of listaEspecialidadesDisponibles;">
+                  <div class="col-2 ">
+                    <button (mouseover)="onMouseOver()" (mouseout)="onMouseOut()"
+                      class="btn btn-success rounded-circle fab-btn btn-sm especialista-button" type="button"
+                      (click)="selecionadoEspecialidad(especialidad)">
+                      <img [src]="obtenerImagenDeEspecialidad(especialidad)" alt="Foto especialista"
+                        class="img-fluid smaller-image especialista-image">
+                      <div class="overflow-hidden">
+                        <p *ngIf="onover">{{especialidad }}</p>
+                      </div>
+                    </button>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div
+          *ngIf="((datosUsuario?.tipoUsuario=='admin' && pacienteSelecionadoPorAdmin && especialidadSeleccionada) || (datosUsuario?.tipoUsuario=='paciente' && especialidadSeleccionada)) "
+          class="row">
+          <h3>Nuestros Especialistas</h3>
           <div *ngFor="let especialista of especialistas" class="col-2">
-            <div (click)="selecionadoEspecialista(especialista)" class="bg-dark bg-opacity-75 p-2 gap-2 rounded-circle">
-              <button class="btn btn-success rounded-circle fab-btn btn-sm especialista-button" type="button" style="height: 200px; overflow: hidden;">
+            <div (click)="selecionadoEspecialista(especialista)" >
+              <button class="btn btn-success rounded-circle fab-btn btn-sm especialista-button" type="button"
+                style="height: 200px; overflow: hidden;">
                 <div class="d-flex flex-column align-items-center">
-                  <img [src]="especialista.fotoUrl" alt="Foto especialista"
-                    class="img-fluid smaller-image ">
+                  <img [src]="especialista.fotoUrl" alt="Foto especialista" class="img-fluid smaller-image ">
                   <div class="overflow-hidden">
                     <h4>{{ especialista.nombre }}</h4>
                     <h4>{{ especialista.apellido }}</h4>
@@ -39,7 +68,7 @@
         </div>
 
         <div class=" row p-2">
-          <div class="col-12 d-flex" *ngIf="especialistaSeleccionado">
+          <!-- <div class="col-12 d-flex" *ngIf="especialistaSeleccionado">
             <div class="col-12 d-flex flex-column">
               <h3>Especialidades de {{especialistaSeleccionado.nombre}}</h3>
               <div class="container">
@@ -48,8 +77,8 @@
                     <div class="col-2 ">
                       <button class="btn btn-success fab-btn btn-sm especialista-button p-2 rounded-circle" type="button"
                         (click)="selecionadoEspecialidad(i)">
-                        <!-- <img [src]="espe.imagen" alt="Foto especialista"
-                          class="img-fluid smaller-image especialista-image"> -->
+                        <img [src]="espe.imagen" alt="Foto especialista"
+                          class="img-fluid smaller-image especialista-image">
                         <div class="overflow-hidden">
                           <p>{{espe }}</p>
                         </div>
@@ -59,20 +88,20 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
 
           <div>
-            <div class="col-12 d-flex" *ngIf="especialidadSeleccionada">
+            <div class="col-12 d-flex" *ngIf="especialistaSeleccionado">
               <div class="col-12 d-flex flex-column">
                 <h3>Dias Disponibles</h3>
                 <div class="container">
                   <div class=" p-2 gap-2 row bg-dark bg-opacity-75">
                     <ng-container *ngFor="let dia of diasTurnos; let i = index;">
                       <div class="col-2 ">
-                        <button class="btn btn-success fab-btn btn-sm rounded-0 p-2 square-btn rounded-circle" type="button"
-                          (click)="selecionadoDia(dia)">
+                        <button class="btn btn-success fab-btn btn-sm  p-2 "
+                          type="button" (click)="selecionadoDia(dia)">
                           <div>
-                            <p>{{ dia | date:'fullDate':'':'es-ES' }}</p>
+                            <p>{{ dia | date:'dd/MM' }}</p>
                           </div>
                         </button>
                       </div>
@@ -90,19 +119,19 @@
                   <div class="bg-dark bg-opacity-75 p-2 gap-2 row">
                     <ng-container *ngFor="let horario of diaHorarios">
                       <div class="col-2 ">
-                        <button *ngIf="datosUsuario.tipoUsuario!='admin'"
-                          class="btn btn-success fab-btn btn-sm especialista-button p-2 rounded-circle" type="button"
+                        <button *ngIf="datosUsuario?.tipoUsuario!='admin'"
+                          class="btn btn-success fab-btn btn-sm p-2 " type="button"
                           (click)="pedirCitaA(horario)">
                           <div class="overflow-hidden">
-                            <p>{{horario }}</p>
+                            <p>{{horario | timeFormat }}</p>
                           </div>
                         </button>
 
-                        <button *ngIf="datosUsuario.tipoUsuario=='admin'"
-                          class="btn btn-success fab-btn btn-sm especialista-button p-2 rounded-circle" type="button"
+                        <button *ngIf="datosUsuario?.tipoUsuario=='admin'"
+                          class="btn btn-success fab-btn btn-sm  p-2 " type="button"
                           (click)="pedirCitaComoAdmin(horario)">
                           <div class="overflow-hidden">
-                            <p>{{horario }}</p>
+                            <p>{{horario | timeFormat }}</p>
                           </div>
                         </button>
                       </div>
@@ -113,9 +142,6 @@
             </div>
           </div>
         </div>
-
-
-
       </div>
     </div>
   </div>

@@ -1,13 +1,13 @@
 <div class="principal centered-row">
     <div class="informacion centered-column" *ngIf="!mostrarHorarios && !mostrarHistorial">
-        <div class="titulo centered-column">
+        <div appAppHoverColor class="titulo centered-column">
             <strong>Mi Perfil</strong>
         </div>
         <div class="datos-personales centered-column">
             <button (click)="vistaHorarios()" *ngIf="datosUsuario?.tipoUsuario=='especialista'" class="btn-horarios">Ver
                 mis horarios</button> <!--SI ES ESPECIALISTA-->
-            <span>Nombre: {{datosUsuario?.nombre}}</span>
-            <span>Apellido: {{datosUsuario?.apellido}}</span>
+            <span>Nombre: {{datosUsuario?.nombre | upperText}}</span>
+            <span>Apellido: {{datosUsuario?.apellido | upperText}}</span>
             <span>Edad: {{datosUsuario?.edad}}</span>
             <span>DNI: {{datosUsuario?.dni}}</span>
             <span>Correo: {{datosUsuario?.mail}}</span>
@@ -74,12 +74,11 @@
         <!-- tabla de historial -->
 
         <div class="card m-5 text-bg-success p-3" style="max-width: 540px;">
+            <img src="../../../assets/logo.png" style="width: 80px; height: 80px;" alt="">
             <div class="row ">
                 <div class="col-md-4">
-                    <h3>
-                        HISTORIA CLÍNICA DE {{ datosUsuario?.apellido }} {{ datosUsuario?.nombre }}
-                        <img class="img-fluid rounded-start" [src]="datosUsuario?.foto1Url" alt="logo" />
-                        <img class="img-fluid rounded-start" [src]="datosUsuario?.foto2Url" alt="logo" />
+                    <h3 >
+                        HISTORIA CLÍNICA DE {{ datosUsuario?.apellido | upperText}} {{ datosUsuario?.nombre | upperText }}
                     </h3>
                     <h3 *ngIf="!historialClinicioSelecionado" style="text-align: center;" class="text-warning">
                         El paciente no posee un historial clinico en esta especialidad
@@ -95,19 +94,22 @@
                                 <h3>
                                     Altura
                                 </h3>
-                                <p>{{ historialClinicioSelecionado?.altura }}</p>
+                                <p appAppHighlight >{{ historialClinicioSelecionado?.altura }}</p>
                                 Peso
-                                <p>{{ historialClinicioSelecionado?.peso }}</p>
+                                <p appAppHighlight>{{ historialClinicioSelecionado?.peso }}</p>
                                 Temperatura
-                                <p>{{ historialClinicioSelecionado?.temperatura }}</p>
+                                <p appAppHighlight>{{ historialClinicioSelecionado?.temperatura }}</p>
                                 Presion
-                                <p>{{ historialClinicioSelecionado?.presion }}</p>
+                                <p appAppHighlight>{{ historialClinicioSelecionado?.presion }}</p>
         
-                                Detalles
-                                <p>
-                            <p class="text-dark" *ngFor="let detalle of (historialClinicioSelecionado?.detalles) | keyvalue">
-                                {{ detalle?.key}}: {{ detalle?.value}}
-                            </p>
+                                <h3>
+                                    Detalles
+                                </h3>
+                                <div *ngFor="let detalle of (historialClinicioSelecionado?.detalles) let i=index">
+                                    <div *ngFor="let subDetalle of (detalle | keyvalue) ">
+                                        <p appAppHighlight >{{subDetalle.key}}: {{subDetalle.value}}</p>
+                                    </div>
+                                </div>
                      
                     </div>
                 </div>
@@ -117,18 +119,18 @@
           
 
     
-                    <!-- <li data-html2canvas-ignore="true">
+                    <li data-html2canvas-ignore="true">
                     Descargar
                     <p data-html2canvas-ignore="true">
                         <button (click)="descargarHistorialPdf()" class="btn btn-success">
                             Descargar PDF
                         </button>
                     </p>
-                </li> -->
+                </li>
              
 
 
-            <button class="btn-confirmar btn-danger" (click)="volverMenu()" *ngIf="mostrarHistorial">Volver
+            <button data-html2canvas-ignore="true" class="btn-confirmar btn-danger" (click)="volverMenu()" *ngIf="mostrarHistorial">Volver
                 Menu</button>
 
             <!-- Tabla de Turnos -->

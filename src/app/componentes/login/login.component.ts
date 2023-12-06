@@ -81,6 +81,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         if (estaVerificado) {
           this.notificaciones.mostrarSuccess("Exito", "INGRESO", 2000, "toast-top-right");
           this.firebase.estaLogueado = true;
+          this.firebase.logUsuario();
           for (let i = 0; i < this.arrayAdmins.length; i++) {
             if (this.arrayAdmins[i].mail == this.emailTs.value) {
               this.firebase.esAdmin = true;

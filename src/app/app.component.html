@@ -1,5 +1,7 @@
 <app-nav-bar></app-nav-bar>
-<ngx-spinner style='display: block'>
+<ngx-spinner type="none" style='display: block'>
     <img src='../assets/logo.png' alt='Loading Spinner' style='border-radius: 50%;'>
 </ngx-spinner>
-<router-outlet></router-outlet>
+<div [@routeAnimations]='prepareRoute(outlet)' style='display: block'>
+    <router-outlet #outlet='outlet'></router-outlet>
+</div>

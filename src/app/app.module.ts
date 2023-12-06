@@ -29,7 +29,13 @@ import { TurnoPacienteComponent } from './componentes/turno-paciente/turno-pacie
 import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
 import { TurnosEspecialistaComponent } from './componentes/turnos-especialista/turnos-especialista.component';
-
+import { TimeFormatPipe } from './pipes/time-format.pipe';
+import { RecaptchaModule } from 'ng-recaptcha';
+import { upperTextPipe } from './pipes/upperText.pipe';
+import { PrimeraLetraMayusculaPipe } from './pipes/primera-letra-mayuscula.pipe';
+import { SoundAlertDirective } from './directives/sound-alert.directive';
+import { AppHighlightDirective } from './directives/app-highlight.directive';
+import { AppHoverColorDirective } from './directives/app-hover-color.directive';
 registerLocaleData(localeEs, 'es');
 
 
@@ -47,11 +53,18 @@ registerLocaleData(localeEs, 'es');
     HabilitarUsuariosComponent,
     MiPerfilComponent,
     TurnoPacienteComponent,
-    TurnosEspecialistaComponent
+    TurnosEspecialistaComponent,
+    TimeFormatPipe,
+    upperTextPipe,
+    PrimeraLetraMayusculaPipe,
+    SoundAlertDirective,
+    AppHighlightDirective,
+    AppHoverColorDirective
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    RecaptchaModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideDatabase(() => getDatabase()),
@@ -63,8 +76,7 @@ registerLocaleData(localeEs, 'es');
     MatIconModule,
     BrowserAnimationsModule,
     FontAwesomeModule,
-    NgxSpinnerModule
-    
+    NgxSpinnerModule,
   ],
   providers: [ { provide: LOCALE_ID, useValue: 'es-ES' },],
   bootstrap: [AppComponent]

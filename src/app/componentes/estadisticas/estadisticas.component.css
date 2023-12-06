@@ -1,0 +1,33 @@
+.principal{
+    width: 90vw;
+    margin-left: 10vw;
+    background: url("../../../assets/fondos/fondo7.jpg");
+    background-position: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.graficos{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 90vw;
+}
+
+
+.graficoIndividual{
+    max-height: 60vh;
+    overflow-y: auto;
+    background-color: rgba(226, 235, 239, 0.6);
+    color:black;
+    border-radius: 20px;
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+}
+

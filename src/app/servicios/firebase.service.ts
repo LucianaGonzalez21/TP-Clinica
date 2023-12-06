@@ -6,7 +6,8 @@ import { NotificacionesService } from './notificaciones.service';
 import { getDownloadURL, getStorage, ref, uploadString } from 'firebase/storage';
 import { formatDate } from '@angular/common';
 import { v4 as uuidv4 } from 'uuid';
-import { where } from 'firebase/firestore';
+import { collection, where } from 'firebase/firestore';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
@@ -18,11 +19,12 @@ export class FirebaseService {
   private apellido: string = "";
   public esAdmin: boolean = false;
   public estaLogueado: boolean = false;
-  private emailUsuarioLogueado:string='';
+  public usuarioLogeado:any;
+  //private emailUsuarioLogueado:string='';
   //admin
   //private emailUsuarioLogueado: string = 'amelumia@gmail.com';
   //paciente 1
-  //  private emailUsuarioLogueado: string = 'veihuwoummanau-5987@yopmail.com';
+    private emailUsuarioLogueado: string = '';
   //especialista 1
   //private emailUsuarioLogueado: string = 'hiddabahola-7537@yopmail.com';
 
@@ -106,6 +108,7 @@ export class FirebaseService {
     this.esAdmin = false;
     this.estaLogueado = false;
     this.emailUsuarioLogueado = '';
+    this.usuarioLogeado = null;
     return this.authenticator.signOut();
   }
   getCitas() {
@@ -142,33 +145,6 @@ export class FirebaseService {
     return null;
   }
 
-  // mofificarHabilitacionEspecialista(emailEspecialista:string, dato: any) {
-  //   const query = this.firestore.collection('especialistas', ref => ref.where("mail", "==", emailEspecialista).limit(1));
-
-  //   return query.get().toPromise().then((querySnapShot: any) => {
-  //     if (!querySnapShot.empty) {
-  //       const idDocumento = querySnapShot.docs[0].id;
-
-
-  //       const referenciaDocumento = this.firestore.collection('especialistas').doc(idDocumento);
-
-  //       let data = {
-  //         ...querySnapShot.docs[0].data,
-  //         estaHabilitado: dato
-  //       }
-
-  //       return referenciaDocumento.update(data);
-  //     } else {
-  //       console.log('No se encontró ningún documento con el atributo y valor especificado.');
-  //       return Promise.reject();
-  //     }
-  //   }).catch((error) => {
-  //     console.error('Error al modificar el documento:', error);
-  //     return Promise.reject(error);
-  //   });
-  // }
-
-  /*NUEVO*/
 
   modificarObjetoPorAtributo(coleccion: string, uidObjeto: string, atributo: string, valor: any): Promise<void> {
     const query = this.firestore.collection(coleccion, ref => ref.where("uid", "==", uidObjeto).limit(1));
@@ -286,4 +262,39 @@ export class FirebaseService {
   }
 
 
+  async logUsuario(){
+    let usuario:any = (await this.obtenerUsuarioDeBaseDeDatos())?.documento;
+    let fecha : string =  formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss', 'en-US');
+    console.log(fecha);
+    const coleccionLogs = this.firestore.collection("logs");
+    this.usuarioLogeado = usuario;
+    coleccionLogs.add(
+      {
+        usuario: usuario,
+        fecha: fecha
+      }
+    )
+  }
+
+  getLogs(){
+    return this.firestore.collection("logs").valueChanges();
+  }
+
+  // obtenerTurnosPorPaciente(paciente:any){
+  //   return this.firestore.collection("citas", ref => ref.where("paciente.uid", "==", paciente.uid)).valueChanges();
+  // }
+
+  obtenerTurnosPorPaciente(paciente: any): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      this.firestore.collection("citas", ref => ref.where("paciente.uid", "==", paciente.uid))
+        .get()
+        .subscribe(
+          (snapshot) => {
+            const turnos = snapshot.docs.map(doc => doc.data());
+            resolve(turnos);
+          },
+          error => reject(error)
+        );
+    });
+  }
 }

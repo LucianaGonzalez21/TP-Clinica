@@ -15,7 +15,13 @@ export class AltaAdministradorComponent {
   fotoSeleccionada:boolean=false;
   fotoDelUsuario:string='';
   @Output() eventoAdmin : EventEmitter<any>=new EventEmitter<any>();
+  tokenGoogle="";
 
+
+  resolved(captchaResponse: string) {
+    console.log(`Resolved response token: ${captchaResponse}`);
+    this.tokenGoogle = captchaResponse;
+  }
   constructor(private formBuilder: FormBuilder, private firebase: FirebaseService, private router: Router, private notificaciones: NotificacionesService) { }
 
   public get Nombre(): FormControl {

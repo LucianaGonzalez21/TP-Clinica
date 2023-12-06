@@ -1,4 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import { faL } from '@fortawesome/free-solid-svg-icons';
 import { FirebaseService } from 'src/app/servicios/firebase.service';
 import { NotificacionesService } from 'src/app/servicios/notificaciones.service';
 
@@ -24,6 +25,8 @@ export class TurnosEspecialistaComponent {
   turnosFiltrados: any;
   filtro: any = "";
   turnoSelecionado: any;
+  listadoPacientesUnicos: any;
+  pacienteSelecionadoPorEspecialista: any;
 
   razon = "";
   //Datos de encuesta 
@@ -32,10 +35,13 @@ export class TurnosEspecialistaComponent {
   nivelLimpieza = ['Malo', 'Normal', 'Excelente'];
   opcionSeleccionada: any = '';
   opcionesMultiple = ['Medico muy capacitado', 'Precio razonable', 'Comoda sala de espera'];
-  muyCapacitado=false;
-  precioRazonable=false;
-  comodaSala=false;
+  muyCapacitado = false;
+  precioRazonable = false;
+  comodaSala = false;
   rango = 1;
+  //logica Botones
+  sePresionoElPaciente: Boolean = false;
+  turnoSeleccionado: any;
 
   @ViewChild('dialog') dialog: ElementRef | undefined;
   @ViewChild('dialogCancelacion') dialogCancelacion: ElementRef | undefined;
@@ -54,6 +60,9 @@ export class TurnosEspecialistaComponent {
   addDetalle() {
     this.detalles.push({});
   }
+
+
+
   constructor(private firebase: FirebaseService, private notificacion: NotificacionesService,) { }
 
   async ngOnInit(): Promise<void> {
@@ -96,6 +105,17 @@ export class TurnosEspecialistaComponent {
         this.turnos = this.turnos.filter((turno: any) => {
           return turno.especialista.mail === this.datosUsuario.mail;
         });
+        this.listadoPacientesUnicos = this.turnos.reduce((accumulator: any, turno: any) => {
+          // Si el paciente ya está en el acumulador, no lo agregas de nuevo
+          if (accumulator.some((t: any) => t.paciente.mail === turno.paciente.mail)) {
+            return accumulator;
+          }
+
+          // Si el paciente no está en el acumulador, lo agregas
+          accumulator.push(turno);
+          return accumulator;
+        }, []);
+
         this.historialClinicioSelecionado = false;
         this.filterTurnosPaciente("");
       }
@@ -144,7 +164,14 @@ export class TurnosEspecialistaComponent {
     }
   }
 
+  CambiarEstadoDelBotonPaciente(turnoPaciente: any) {
+    this.sePresionoElPaciente = true;
+    this.pacienteSelecionadoPorEspecialista = turnoPaciente.paciente;
+    this.filterTurnosPaciente("");
+    //this.turnosFiltrados=this.turnosFiltrados.filter((turno:any)=>{turno.paciente.mail==turnoPaciente.mail})
+    //this.turnoSeleccionado=turno;
 
+  }
 
   determinarindexDeEspecialidad() {
     let index = 0;
@@ -217,15 +244,15 @@ export class TurnosEspecialistaComponent {
   verResenia(turno: any) {
     if (turno.hasOwnProperty('encuesta')) {
 
-      let opcionesActivas='';
-      if(turno.encuesta.muyCapacitado){
-        opcionesActivas+='Medico muy capacitado, '
+      let opcionesActivas = '';
+      if (turno.encuesta.muyCapacitado) {
+        opcionesActivas += 'Medico muy capacitado, '
       }
-      if(turno.encuesta.comodaSala){
-        opcionesActivas+='Precio razonable, '
+      if (turno.encuesta.comodaSala) {
+        opcionesActivas += 'Precio razonable, '
       }
-      if(turno.encuesta.precioRazonable){
-        opcionesActivas+='Comoda sala, '
+      if (turno.encuesta.precioRazonable) {
+        opcionesActivas += 'Comoda sala, '
       }
 
       let resultado = `
@@ -249,7 +276,8 @@ export class TurnosEspecialistaComponent {
   async verHistorial(turno: any) {
     const paciente: any = await this.firebase.obtenerUsuarioPorUID(turno.paciente.uid);
     this.turnoSelecionado = turno;
-    this.historialClinicioSelecionado = paciente?.documento.historial;
+    console.log(turno);
+    this.historialClinicioSelecionado = turno.historial;
   }
 
   public filterByInput() {
@@ -278,8 +306,25 @@ export class TurnosEspecialistaComponent {
   }
   filtrarHistorialDetalles(detalles: any, search: any) {
     if (detalles) {
-      return detalles.some((element: any) => {
-        return (String)(element.key).includes(search) || (String)(element.value).includes(search);
+      let arrayComparacion: any[] = [];
+
+      for (const key in detalles) {
+        if (Object.prototype.hasOwnProperty.call(detalles, key)) {
+          const element: any = detalles[key];
+          for (const key in element) {
+            if (Object.prototype.hasOwnProperty.call(element, key)) {
+              const elemento = element[key];
+              arrayComparacion.push(key);
+              arrayComparacion.push(elemento);
+
+              console.log(key);
+              console.log(elemento);
+            }
+          }
+        }
+      }
+      return arrayComparacion.some((element) => {
+        return (element).includes(search);
       });
     } else {
       return false;
@@ -289,34 +334,80 @@ export class TurnosEspecialistaComponent {
 
 
   async filterTurnosPaciente(value: string) {
-    this.turnosFiltrados = this.turnos.filter((turno: any) => {
-      let detalleCoincide = false;
-      let historialCoincide = false;
-      //Formateo la fecha a string para poder compararla y filtrala
-      let diaEscrito = this.obtenerFechaFormateada(turno.dia);
-      diaEscrito = this.formatearFecha(diaEscrito);
-      //Verifico si tiene historial para poder filtrar historial y detalles que estan dentro del historial
-      if (turno.hasOwnProperty('historial')) {
-        historialCoincide = this.filtrarHistorial(turno.historial, value);
-        detalleCoincide = this.filtrarHistorialDetalles(turno.historial?.detalles, value);
-      }
-      return (
-        //comparaciones del especialista
-        turno.especialista.especialidad.includes(value) ||
-        turno.especialista.mail.includes(value) ||
-        turno.especialista.nombre.includes(value) ||
-        turno.especialista.apellido.includes(value) ||
-        //comparaciones del turno
-        turno.horario.includes(value) || turno.estado.includes(value) || turno.especialidadDelTurno.includes(value)
-        || diaEscrito.includes(value) ||
-        //Comparaciones del paciente 
-        turno.paciente.nombre.includes(value) ||
-        turno.paciente.apellido.includes(value) ||
-        //comparaciones de historial y detalles
-        historialCoincide
-        || detalleCoincide
-      )
-    })
+
+    if (this.datosUsuario.tipoUsuario == "especialista" && this.pacienteSelecionadoPorEspecialista) {
+     let filtradoPacientesCitas = this.turnos.filter((turnoPaciente: any) => turnoPaciente.paciente.mail == this.pacienteSelecionadoPorEspecialista.mail);
+    
+      this.turnosFiltrados = filtradoPacientesCitas.filter((turno: any) => {
+        let detalleCoincide = false;
+        let historialCoincide = false;
+        //Formateo la fecha a string para poder compararla y filtrala
+        let diaEscrito = this.obtenerFechaFormateada(turno.dia);
+        diaEscrito = this.formatearFecha(diaEscrito);
+        //Verifico si tiene historial para poder filtrar historial y detalles que estan dentro del historial
+        if (turno.hasOwnProperty('historial')) {
+
+
+          historialCoincide = this.filtrarHistorial(turno.historial, value);
+          detalleCoincide = this.filtrarHistorialDetalles(turno.historial?.detalles, value);
+        }
+        return (
+          //comparaciones del especialista
+          turno.especialista.especialidad.includes(value) ||
+          turno.especialista.mail.includes(value) ||
+          turno.especialista.nombre.includes(value) ||
+          turno.especialista.apellido.includes(value) ||
+          //comparaciones del turno
+          turno.horario.includes(value) || turno.estado.includes(value) || turno.especialidadDelTurno.includes(value)
+          || diaEscrito.includes(value) || ('0' + diaEscrito).includes(value) ||
+          //Comparaciones del paciente 
+          turno.paciente.nombre.includes(value) ||
+          turno.paciente.apellido.includes(value) ||
+          //comparaciones de historial y detalles
+          historialCoincide
+          || detalleCoincide
+        )
+      })
+    
+    } 
+    else {
+
+      console.log(this.turnos);
+
+
+
+      this.turnosFiltrados = this.turnos.filter((turno: any) => {
+        let detalleCoincide = false;
+        let historialCoincide = false;
+        //Formateo la fecha a string para poder compararla y filtrala
+        let diaEscrito = this.obtenerFechaFormateada(turno.dia);
+        diaEscrito = this.formatearFecha(diaEscrito);
+        //Verifico si tiene historial para poder filtrar historial y detalles que estan dentro del historial
+        if (turno.hasOwnProperty('historial')) {
+
+
+          historialCoincide = this.filtrarHistorial(turno.historial, value);
+          detalleCoincide = this.filtrarHistorialDetalles(turno.historial?.detalles, value);
+        }
+        return (
+          //comparaciones del especialista
+          turno.especialista.especialidad.includes(value) ||
+          turno.especialista.mail.includes(value) ||
+          turno.especialista.nombre.includes(value) ||
+          turno.especialista.apellido.includes(value) ||
+          //comparaciones del turno
+          turno.horario.includes(value) || turno.estado.includes(value) || turno.especialidadDelTurno.includes(value)
+          || diaEscrito.includes(value) || ('0' + diaEscrito).includes(value) ||
+          //Comparaciones del paciente 
+          turno.paciente.nombre.includes(value) ||
+          turno.paciente.apellido.includes(value) ||
+          //comparaciones de historial y detalles
+          historialCoincide
+          || detalleCoincide
+        )
+      })
+    }
+
     //this.filtrarHistorialDetalles(this.turnosFiltrados.historial.detalles,value);
   }
 
@@ -324,16 +415,16 @@ export class TurnosEspecialistaComponent {
     console.log(this.dialog?.nativeElement);
     let detalles: any[] = [];
     this.detalles.forEach((element: any) => {
-      detalles.push(element);
+      let objeto = { [element.key]: element.value }
+      detalles.push(objeto);
     });
-
     const historial = {
       fechaInforme: new Date(),
       'altura': this.altura,
       'peso': this.peso ? this.peso : "NA",
-      'presion': this.presion ? this.peso : "NA",
+      'presion': this.presion ? this.presion : "NA",
       'temperatura': this.temperatura ? this.temperatura : "NA",
-      'detalles': this.detalles ? this.detalles : "NA",
+      'detalles': detalles ? detalles : "NA",
       'resena': this.resena ? this.resena : "NA",
     }
 
@@ -352,8 +443,8 @@ export class TurnosEspecialistaComponent {
 
   subirEncuesta() {
 
-    
-   
+
+
     console.log(this.muyCapacitado);
     console.log(this.precioRazonable);
     console.log(this.comodaSala);
@@ -362,9 +453,9 @@ export class TurnosEspecialistaComponent {
       comentario: this.comentarios ? this.comentarios : "NA",
       calificacion: this.calificacion ? this.calificacion : 1,
       nivelLimpieza: this.opcionSeleccionada ? this.opcionSeleccionada : "Normal",
-      muyCapacitado:this.muyCapacitado,
-      comodaSala:this.comodaSala,
-      precioRazonable:this.precioRazonable,
+      muyCapacitado: this.muyCapacitado,
+      comodaSala: this.comodaSala,
+      precioRazonable: this.precioRazonable,
       satisfacion: this.rango ? this.rango : 1
     }
     this.dialogEncuesta?.nativeElement.close();
@@ -372,5 +463,8 @@ export class TurnosEspecialistaComponent {
     this.firebase.modificarObjetoPorAtributo("citas", this.turnoSelecionado.uid, "encuesta", encuesta);
     this.firebase.modificarObjetoPorAtributo("citas", this.turnoSelecionado.uid, "estado", "finalizado");
 
+  }
+  cerrarEncuesta() {
+    this.dialogEncuesta?.nativeElement.close();
   }
 }

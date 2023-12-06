@@ -16,7 +16,8 @@ export class NavBarComponent implements OnInit{
   esEspecialista:boolean=false;
   esAdmin:boolean=false;
 
-  constructor(private firebase: FirebaseService, private cdRef: ChangeDetectorRef, private notificaciones: NotificacionesService, private router: Router) {
+  constructor(public firebase: FirebaseService, private cdRef: ChangeDetectorRef, private notificaciones: NotificacionesService, private router: Router) {
+  
   }
 
   ngAfterViewChecked() {

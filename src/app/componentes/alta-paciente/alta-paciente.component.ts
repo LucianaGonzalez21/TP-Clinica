@@ -16,8 +16,12 @@ export class AltaPacienteComponent {
   fotoSeleccionada2: boolean = false;
   fotoDelUsuario: string = '';
   fotoDelUsuario2: string = '';
+  tokenGoogle="";
   @Output() eventoPaciente: EventEmitter<any> = new EventEmitter<any>();
-
+  resolved(captchaResponse: string) {
+    console.log(`Resolved response token: ${captchaResponse}`);
+    this.tokenGoogle = captchaResponse;
+  }
   constructor(private formBuilder: FormBuilder, private firebase: FirebaseService, private router: Router, private notificaciones: NotificacionesService) { }
 
   ngOnInit(): void {
